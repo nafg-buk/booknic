@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>북크닉 대여소</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap">
+<style>
+:root{
+  --bg:#f2f6ef; --panel:#ffffff; --ink:#1d3a2e; --muted:#5d7368; --line:#d6e0d3;
+  --brand:#2f7a55; --brand-ink:#ffffff; --check:#d9482f; --check-soft:#fbe6e1;
+  --ok:#2f7a55; --warn:#b26a00; --full:#8a948e; --sel:#e3f1e8;
+  --gingham: rgba(217,72,47,.16);
+  --display:"Jua","Gowun Dodum",system-ui,sans-serif; --body:"Gowun Dodum",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12201a; --panel:#1a2c23; --ink:#e6f0e8; --muted:#9db3a5; --line:#2c4237;
+  --brand:#6cc596; --brand-ink:#0f1f17; --check:#f0765f; --check-soft:#3a2622;
+  --ok:#6cc596; --warn:#e5a94a; --full:#6f8177; --sel:#22392d; --gingham: rgba(240,118,95,.18);}}
+:root[data-theme="dark"]{
+  --bg:#12201a; --panel:#1a2c23; --ink:#e6f0e8; --muted:#9db3a5; --line:#2c4237;
+  --brand:#6cc596; --brand-ink:#0f1f17; --check:#f0765f; --check-soft:#3a2622;
+  --ok:#6cc596; --warn:#e5a94a; --full:#6f8177; --sel:#22392d; --gingham: rgba(240,118,95,.18);}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;padding-inline:16px;padding-block:0 48px}
+.wrap{max-width:640px;margin:0 auto}
+header{margin-inline:-16px;padding:36px 16px 28px;
+  background:
+    repeating-linear-gradient(0deg,var(--gingham) 0 14px,transparent 14px 28px),
+    repeating-linear-gradient(90deg,var(--gingham) 0 14px,transparent 14px 28px),var(--panel);
+  border-bottom:1px solid var(--line)}
+header .in{max-width:640px;margin:0 auto}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(34px,9vw,46px);line-height:1.1;margin:0 0 8px;letter-spacing:-.01em;text-wrap:balance}
+header p{margin:0;color:var(--muted)}
+.kit{margin-top:12px!important;color:var(--ink)!important}.kit b{background:var(--check);color:#fff;border-radius:6px;padding:1px 8px;margin-right:8px;font-size:14px;font-weight:400}.kit span{color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tag{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:14px}
+section{margin-top:32px}
+h2{font-family:var(--display);font-weight:400;font-size:22px;margin:0 0 12px;display:flex;align-items:center;gap:10px}
+h2 .n{background:var(--check);color:#fff;border-radius:50%;width:28px;height:28px;display:inline-grid;place-items:center;font-size:15px;flex:none}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.opt{font:inherit;color:inherit;background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:12px 8px;cursor:pointer;text-align:center;transition:border-color .15s,background .15s}
+.opt:hover{border-color:var(--brand)}
+.opt[aria-pressed="true"],.opt.on{border-color:var(--brand);background:var(--sel)}
+.opt:disabled{cursor:not-allowed;color:var(--full);background:transparent;border-style:dashed}
+.day{font-family:var(--display);font-size:26px;line-height:1.1}
+.day small{display:block;font-family:var(--body);font-size:13px;color:var(--muted)}
+.slots{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.slot{text-align:left;padding:14px 16px}
+.slot .t{font-family:var(--display);font-size:20px}
+.slot .r{font-size:14px;color:var(--muted)}
+.slot .left{font-size:14px;margin-top:6px;font-weight:700;color:var(--ok)}
+.slot .left.low{color:var(--warn)}.slot .left.none{color:var(--full)}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:460px){.fields{grid-template-columns:1fr}}
+label.f{display:grid;gap:4px;font-size:14px;color:var(--muted)}
+input[type=text],input[type=tel]{font:inherit;color:var(--ink);background:var(--panel);border:2px solid var(--line);border-radius:12px;padding:11px 12px;width:100%}
+input[type=text]:focus,input[type=tel]:focus{outline:none;border-color:var(--brand)}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.summary{margin-top:24px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}
+.summary .line{color:var(--muted);font-size:15px}.summary .line b{color:var(--ink)}
+.go{font:inherit;font-family:var(--display);font-size:20px;width:100%;margin-top:14px;padding:14px;border:0;border-radius:14px;background:var(--brand);color:var(--brand-ink);cursor:pointer}
+.go:disabled{opacity:.45;cursor:not-allowed}
+.msg{margin-top:12px;padding:12px 14px;border-radius:12px;font-size:15px}
+.msg.err{background:var(--check-soft);color:var(--check)}
+.msg.ok{background:var(--sel);color:var(--ok)}
+.res{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:8px}
+.res .d{font-weight:700}.res .s{color:var(--muted);font-size:14px}
+.ghost{font:inherit;font-size:14px;background:transparent;border:1px solid var(--line);color:var(--check);border-radius:10px;padding:6px 12px;cursor:pointer;flex:none}
+.lookup{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}
+@media(max-width:460px){.lookup{grid-template-columns:1fr}}
+.lookup button{font:inherit;background:var(--ink);color:var(--bg);border:0;border-radius:12px;padding:12px 18px;cursor:pointer}
+.notice{margin-top:32px;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+
+<header><div class="in">
+  <h1>북크닉 대여소</h1>
+  <p>돗자리 펴고, 책 한 권 들고, 점심시간에 잠깐 쉬어가요.</p>
+  <p class="kit"><b>대여 물품</b> 돗자리 · 담요 · 소정의 간식 <span>(한 세트로 대여해요)</span></p>
+  <div class="tags"><span class="tag">이번 주 월 · 화 · 수</span><span class="tag">1타임 12:30–13:00</span><span class="tag">2타임 13:00–13:35</span></div>
+</div></header>
+
+<main class="wrap">
+  <section>
+    <h2><span class="n">1</span>요일 선택</h2>
+    <div class="seg" id="days"></div>
+  </section>
+
+  <section>
+    <h2><span class="n">2</span>타임 선택</h2>
+    <div class="slots" id="slots"></div>
+  </section>
+
+  <section>
+    <h2><span class="n">3</span>신청자 정보</h2>
+    <div class="fields">
+      <label class="f" for="name">이름<input id="name" type="text" autocomplete="name" maxlength="20" placeholder="홍길동"></label>
+      <label class="f" for="sid">학번<input id="sid" type="text" inputmode="numeric" maxlength="4" placeholder="예: 1234"></label>
+    </div>
+    <div class="summary">
+      <div class="line" id="sum">요일과 타임을 선택해 주세요.</div>
+      <button class="go" id="go" disabled>신청하기</button>
+      <div id="msg" role="status"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>내 예약 확인 · 취소</h2>
+    <div class="lookup">
+      <label class="f" for="qn">이름<input id="qn" type="text" maxlength="20"></label>
+      <label class="f" for="qs">학번<input id="qs" type="text" inputmode="numeric" maxlength="4"></label>
+      <button id="find">조회</button>
+    </div>
+    <div id="mine"></div>
+  </section>
+
+  <p class="notice">대여 물품은 신청한 타임 시작 전에 수령하고, 타임이 끝나면 바로 반납해 주세요. 사정이 생기면 위에서 예약을 취소해 주세요.</p>
+</main>
+
+<script>
+(function(){
+  var API = 'https://script.google.com/macros/s/AKfycbxQ8feYma5i3sHpfRMVEjDMSRVMrMH79B2NqBABKQK9OuS-_Eqd4HoiHqe0An56UtwI/exec';
+  var CAPACITY = 6;
+  var DAYS = [{k:1,n:'월',date:'2026-09-21'},{k:2,n:'화',date:'2026-09-22'},{k:3,n:'수',date:'2026-09-23'}];
+  var SLOTS = [{id:1,name:'1타임',time:'12:30 – 13:00',start:'12:30'},{id:2,name:'2타임',time:'13:00 – 13:35',start:'13:00'}];
+  var WD = ['일','월','화','수','목','금','토'];
+  var $ = function(id){return document.getElementById(id)};
+  var state = {day:null,date:null,slot:null,counts:{},loaded:false,busy:false};
+
+  function pad(n){return (n<10?'0':'')+n}
+  function iso(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+  function nice(s){var p=s.split('-');var d=new Date(+p[0],+p[1]-1,+p[2]);return (+p[1])+'월 '+(+p[2])+'일 ('+WD[d.getDay()]+')'}
+  function slotOf(id){return SLOTS.filter(function(s){return s.id===id})[0]}
+
+  function call(payload){
+    return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).then(function(r){return r.json()});
+  }
+  function loadCounts(){
+    return fetch(API).then(function(r){return r.json()}).then(function(j){
+      if(j&&j.ok){state.counts=j.counts||{};state.loaded=true;renderAll()}
+    }).catch(function(){ if(!state.loaded)say('예약 현황을 불러오지 못했어요. 새로고침해 주세요.','err') });
+  }
+
+  function upcoming(dow){
+    var d=DAYS.filter(function(x){return x.k===dow})[0],now=new Date();
+    if(iso(now)>d.date)return [];
+    if(iso(now)===d.date&&now.getHours()*60+now.getMinutes()>=13*60+35)return [];
+    return [d.date];
+  }
+  function count(date,slot){return state.counts[date+'_'+slot]||0}
+  function slotClosed(date,slot){
+    var now=new Date();if(iso(now)!==date)return false;
+    var p=slotOf(slot).start.split(':');return now.getHours()*60+now.getMinutes()>=(+p[0])*60+(+p[1]);
+  }
+
+  function renderDays(){
+    $('days').innerHTML='';
+    DAYS.forEach(function(d){
+      var b=document.createElement('button');b.className='opt';b.type='button';
+      var n=upcoming(d.k)[0];
+      b.setAttribute('aria-pressed',String(state.day===d.k));
+      b.innerHTML='<span class="day">'+d.n+'<small>'+(n?nice(n).split(' (')[0]:'신청 마감')+'</small></span>';
+      b.disabled=!n;
+      b.onclick=function(){state.day=d.k;state.date=upcoming(d.k)[0];state.slot=null;renderAll()};
+      $('days').appendChild(b);
+    });
+  }
+  function renderSlots(){
+    var el=$('slots');el.innerHTML='';
+    SLOTS.forEach(function(s){
+      var b=document.createElement('button');b.type='button';b.className='opt slot';
+      var left=Math.max(0,CAPACITY-(state.date?count(state.date,s.id):0));
+      var closed=state.date&&slotClosed(state.date,s.id);
+      b.disabled=!state.date||left===0||closed||!state.loaded;
+      b.setAttribute('aria-pressed',String(state.slot===s.id));
+      var st=!state.date?'':(!state.loaded?'<div class="left none">불러오는 중…</div>':closed?'<div class="left none">신청 마감</div>':left===0?'<div class="left none">마감</div>':'<div class="left'+(left<=2?' low':'')+'">'+left+'세트 남음</div>');
+      b.innerHTML='<div class="t">'+s.name+'</div><div class="r">'+s.time+'</div>'+st;
+      b.onclick=function(){state.slot=s.id;renderAll()};
+      el.appendChild(b);
+    });
+  }
+  function renderSummary(){
+    var ok=state.date&&state.slot&&$('name').value.trim()&&$('sid').value.trim()&&state.loaded&&!state.busy;
+    $('go').disabled=!ok;
+    $('sum').innerHTML=(state.date&&state.slot)
+      ?'<b>'+nice(state.date)+'</b> · <b>'+slotOf(state.slot).name+'</b> ('+slotOf(state.slot).time+')<br>돗자리 · 담요 · 간식 세트'
+      :'요일과 타임을 선택해 주세요.';
+  }
+  function renderAll(){renderDays();renderSlots();renderSummary()}
+  function say(t,cls){var m=$('msg');m.className='msg '+cls;m.textContent=t}
+
+  function submit(){
+    var name=$('name').value.trim(),sid=$('sid').value.trim();
+    if(!/^[0-9]{4}$/.test(sid)){say('학번 네 자리 숫자를 입력해 주세요.','err');return}
+    state.busy=true;renderSummary();say('신청 중이에요…','ok');
+    call({action:'book',date:state.date,slot:state.slot,name:name,sid:sid}).then(function(j){
+      if(j.counts)state.counts=j.counts;
+      if(j.ok){
+        say(name+' 님, 신청 완료! '+nice(state.date)+' '+slotOf(state.slot).name+'('+slotOf(state.slot).time+')에 만나요.','ok');
+        $('qn').value=name;$('qs').value=sid;showMine();
+      }else say(j.error||'신청하지 못했어요.','err');
+    }).catch(function(){say('신청하지 못했어요. 잠시 후 다시 시도해 주세요.','err')})
+    .then(function(){state.busy=false;renderAll()});
+  }
+
+  function showMine(){
+    var n=$('qn').value.trim(),s=$('qs').value.trim(),el=$('mine');
+    if(!n||!s){el.innerHTML='';return}
+    call({action:'mine',name:n,sid:s}).then(function(j){
+      el.innerHTML='';
+      var today=iso(new Date());
+      var mine=(j.mine||[]).filter(function(b){return b.date>=today}).sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:a.slot-b.slot});
+      if(!j.ok){el.innerHTML='<div class="res"><span class="s"></span></div>';el.firstChild.firstChild.textContent=j.error||'';return}
+      if(!mine.length){el.innerHTML='<div class="res"><span class="s">예정된 예약이 없어요. 이름과 학번을 확인해 주세요.</span></div>';return}
+      mine.forEach(function(b){
+        var d=document.createElement('div');d.className='res';
+        d.innerHTML='<div><div class="d">'+nice(b.date)+' · '+slotOf(b.slot).name+'</div><div class="s">'+slotOf(b.slot).time+'</div></div>';
+        var c=document.createElement('button');c.className='ghost';c.textContent='취소';
+        c.onclick=function(){
+          c.disabled=true;
+          call({action:'cancel',id:b.id,name:n,sid:s}).then(function(r){
+            if(r.counts)state.counts=r.counts;renderAll();showMine();
+          }).catch(function(){c.disabled=false});
+        };
+        d.appendChild(c);el.appendChild(d);
+      });
+    }).catch(function(){el.innerHTML='<div class="res"><span class="s">조회하지 못했어요. 잠시 후 다시 시도해 주세요.</span></div>'});
+  }
+
+  ['name','sid'].forEach(function(id){$(id).addEventListener('input',renderSummary)});
+  $('find').onclick=showMine;
+  $('go').onclick=submit;
+
+  (function(){var best=null,bd=null;DAYS.forEach(function(d){var u=upcoming(d.k)[0];if(u&&(!bd||u<bd)){bd=u;best=d.k}});if(best){state.day=best;state.date=bd}})();
+  renderAll();
+  loadCounts();
+  setInterval(loadCounts,30000);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)loadCounts()});
+})();
+</script>
+</body>
+</html>
